@@ -1,0 +1,49 @@
+<!-- <h2>Dodaj/izmeni namirnicu</h2> -->
+<h2 ng-bind="title"></h2>
+
+<form ng-init="initCalc()" class="form-horizontal">
+	<div class="form-group row">
+		<label ng-hide="true" class="col-sm-2 control-label">Id calc</label>
+	    <div ng-hide="true" class="col-sm-4">
+	    	<input type="text" class="form-control" placeholder="Id calc..." ng-model="calc.idcalc" disabled>
+	    </div>
+		<label ng-hide="true" class="col-sm-2 control-label">Id namirnice</label>
+	    <div ng-hide="true" class="col-sm-4">
+	    	<input type="text" class="form-control" placeholder="Id namirnice..." ng-model="calc.namirnica.id" >
+	    </div>
+	    <label class="col-sm-2 control-label">Namirnica</label>
+	    <div class="col-sm-4">
+	    	<input type="text" class="form-control" placeholder="Ime..." ng-model="calc.namirnica.name"disabled>
+	    </div>
+	    <label class="col-sm-2 control-label">Kalorije (kCal)</label>
+	    <div class="col-sm-4">
+	    	<input type="number" class="form-control" placeholder="Kalorije..." ng-model="calc.namirnica.kalorije/100*calc.kolicina"disabled>
+	    </div>
+	    <label class="col-sm-2 control-label">Ugljeni Hidrati (gr)</label>
+	    <div class="col-sm-4">
+	    	<input type="number" class="form-control" placeholder="Ugljeni Hidrati..." ng-model="calc.namirnica.ugljeniHidrati/100*calc.kolicina"disabled>
+	    </div>
+	    <label class="col-sm-2 control-label">Masti (gr)</label>
+	    <div class="col-sm-4">
+	    	<input type="number" class="form-control" placeholder="Masti..." ng-model="calc.namirnica.masti/100*calc.kolicina"disabled>
+	    </div>
+	    <label class="col-sm-2 control-label">Proteini (gr)</label>
+	    <div class="col-sm-4">
+	    	<input type="number" class="form-control" placeholder="Proteini..." ng-model="calc.namirnica.proteini/100*calc.kolicina"disabled>
+	    </div>
+	    <label class="col-sm-2 control-label">Šećer (gr)</label>
+	    <div class="col-sm-4">
+	    	<input type="number" class="form-control" placeholder="Šećer..." ng-model="calc.namirnica.secer/100*calc.kolicina"disabled>
+	    </div>
+	    <label class="col-sm-2 control-label">Količina (gr)</label>
+	    <div class="col-sm-4">
+	    	<input type="text" class="form-control" placeholder="Količina..." ng-model="calc.kolicina">
+	    </div>
+ 	</div>
+	
+	<div class="form-group">
+	    <div class="col-sm-offset-2 col-sm-10">
+	    	<button ng-disabled="!calc.kolicina || !calc.namirnica.id" ng-click="saveCalc()" type="submit" class="btn btn-info">Snimi</button>
+	    </div>
+  	</div>
+</form>

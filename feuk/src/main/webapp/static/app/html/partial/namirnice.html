@@ -1,0 +1,77 @@
+<h2>Namirnice <span class="badge">{{ totalnamirnice }}</span></h2>
+
+<input type="text" ng-model="search" ng-init="addAll()" placeholder="Traži po imenu..." ng-change="getAll()" uib-typeahead="namirnica for namirnica in namirniceTypeahead | filter:$viewValue | limitTo:120"/>
+<button class="btn btn-danger btn-sm" ng-click="search=null; getAll();">Poništi</button>
+<br>
+<select class="btn btn-default btn-sm" ng-model="number" ng-value="20" ng-change="getAll()">
+	<option value = "10">10</option>
+	<option value = "20" selected>20</option>
+	<option value = "50">50</option>
+	<option value = "100">100</option>
+</select>
+Namirnica po stranici
+
+<table ng-init="page=0; number=20; getAll();" class="table table-bordered table-striped table-hover">
+	<thead>
+		<tr>
+			<!-- <th>Id</th> -->
+			<th>Namirnica</th>
+			<th>Kalorije<br>(kCal)</th>
+			<th>Ugljeni Hidrati<br>(gr)</th>
+			<th>Masti<br>(gr)</th>
+			<th>Proteini<br>(gr)</th>
+			<th>Šećer<br>(gr)</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="namirnica in namirnice">
+			<!-- <td>{{ namirnica.id }}</td> -->
+			<td><b>{{ namirnica.name }}</b></td>
+			<td>{{ namirnica.kalorije }}</td>
+			<td>{{ namirnica.ugljeniHidrati }}</td>
+			<td>{{ namirnica.masti }}</td>
+			<td>{{ namirnica.proteini }}</td>
+			<td>{{ namirnica.secer }}</td>
+			<td>
+				<!-- <button class="btn btn-danger btn-sm" ng-show="obrisi" ng-click="remove(namirnica.id)">Obriši</button> -->
+				<button class="btn btn-danger btn-sm" ng-show="obrisi" ng-click="sigurni=true;obrisi=false">Obriši</button>
+				<div ng-show="sigurni"> Da li ste sigurni?
+					<button class="btn btn-danger btn-sm" ng-click="remove(namirnica.id); sigurni=false;obrisi=true;">Da</button>
+					<button class="btn btn-warning btn-sm" ng-click="sigurni=false;obrisi=true;">Ne</button>
+				</div>
+				<a class="btn btn-warning btn-sm" href="/#/namirnice/edit/{{ namirnica.id }}">Izmeni</a>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<div ng-show="showDeleteAlert" class="alert alert-danger alert-dismissible" role="alert">
+	<button type="button" class="close" data-dismiss="alert" aria-label="Zatvori" ng-click="showDeleteAlert=false"><span aria-hidden="true">&times;</span></button>
+	Namirnica {{namirnicaWarning.name}} je uspešno obrisana.
+</div>
+
+<div ng-show="showDeleteError" class="alert alert-danger alert-dismissible" role="alert">
+	<button type="button" class="close" data-dismiss="alert" aria-label="Zatvori" ng-click="showDeleteError=false"><span aria-hidden="true">&times;</span></button>
+	Došlo je do greške prilikom brisanja namirnice {{namirnicaWarning.id}}.
+</div>
+
+<div class="row text-center">
+	<span ng-hide="hideSpinner"
+	class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+	<div ng-show="showError" class="alert alert-danger">
+		Ups, nešto je pošlo naopako! :) <a href="#" class="close"
+		data-dismiss="alert" aria-label="Zatvori" ng-click="showError=false">&times;</a>
+	</div>
+</div>
+
+<div class="row text-right" ng-hide="hidePaginationNamirnice">
+	<button class="btn btn-default" ng-click="page=page-1; getAll()"
+	ng-disabled="page == 0">Prethodna</button>
+	<span ng-repeat="page in totalpages"></span>
+	{{page +1}} / {{totalpages}}
+	<button class="btn btn-default" ng-click="page=page+1; getAll()"
+	ng-disabled="page == totalpages - 1">Sledeća</button>
+</div>
+
+<a class="btn btn-info btn-sm" href="/#/namirnice/add">Dodaj novu namirnicu</a>

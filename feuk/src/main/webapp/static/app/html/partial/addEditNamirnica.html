@@ -1,0 +1,41 @@
+<!-- <h2>Dodaj/izmeni namirnicu</h2> -->
+<h2 ng-bind="title"></h2>
+
+<form ng-init="init(); addAll();" class="form-horizontal">
+	<div class="form-group row">
+	    <!-- <label class="col-sm-2 control-label">Id</label>
+	    <div class="col-sm-4">
+	    	<input type="text" class="form-control" placeholder="Id..." ng-model="namirnica.id" disabled>
+	    </div> -->
+	    <label class="col-sm-2 control-label">Ime</label>
+	    <div class="col-sm-4">
+	    	<input type="text" class="form-control" placeholder="Ime..." ng-model="namirnica.name">
+	    </div>
+	    <label class="col-sm-2 control-label">Kalorije (kCal)</label>
+	    <div class="col-sm-4">
+	    	<input type="number" class="form-control" placeholder="Kalorije..." ng-model="namirnica.kalorije">
+	    </div>
+	    <label class="col-sm-2 control-label">Ugljeni Hidrati (gr)</label>
+	    <div class="col-sm-4">
+	    	<input type="number" class="form-control" placeholder="Ugljeni Hidrati..." ng-model="namirnica.ugljeniHidrati">
+	    </div>
+	    <label class="col-sm-2 control-label">Masti (gr)</label>
+	    <div class="col-sm-4">
+	    	<input type="number" class="form-control" placeholder="Masti..." ng-model="namirnica.masti">
+	    </div>
+	    <label class="col-sm-2 control-label">Proteini (gr)</label>
+	    <div class="col-sm-4">
+	    	<input type="number" class="form-control" placeholder="Proteini..." ng-model="namirnica.proteini">
+	    </div>
+	    <label class="col-sm-2 control-label">Šećer (gr)</label>
+	    <div class="col-sm-4">
+	    	<input type="number" class="form-control" placeholder="Šećer..." ng-model="namirnica.secer">
+	    </div>
+ 	</div>
+	
+	<div class="form-group">
+	    <div class="col-sm-offset-2 col-sm-10">
+	    	<button ng-disabled="!namirnica.name" ng-click="save()" type="submit" class="btn btn-info">Snimi</button>
+	    </div>
+  	</div>
+</form>

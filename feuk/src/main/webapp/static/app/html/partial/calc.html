@@ -1,0 +1,180 @@
+<h2>Unosa<span class="badge">{{ totalcalci }}</span></h2>
+<select class="btn btn-default btn-sm" ng-model="numbercalc" ng-value="20" ng-change="getAllCalc()">
+	<option value = "10">10</option>
+	<option value = "20" selected="selected">20</option>
+	<option value = "50">50</option>
+	<option value = "100">100</option>
+</select>
+Unosa po stranici
+<table ng-init="pagecalc=0; numbercalc=20; getAllCalc();" class="table table-bordered table-striped table-hover">
+	<thead>
+		<tr>
+			<!-- <th>Idcalc</th> -->
+			<!-- <th>Id namirnice</th> -->
+			<th>Naziv namirnice</th>
+			<th>Kalorije<br>(kCal)</th>
+			<th>Ugljeni Hidrati<br>(gr)</th>
+			<th>Masti<br>(gr)</th>
+			<th>Proteini<br>(gr)</th>
+			<th>Šećer<br>(gr)</th>
+			<th>Količina<br>(gr)</th>
+			<th>Actions</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="calc in calci">
+			<!-- <td>{{ calc.idcalc }}</td> -->
+			<!-- <td>{{ calc.namirnica.id }}</td> -->
+			<td><b>{{ calc.namirnica.name }}</b></td>
+			<td>{{ calc.namirnica.kalorije/100*calc.kolicina | number:2 }}</td>
+			<td>{{ calc.namirnica.ugljeniHidrati/100*calc.kolicina | number:2 }}</td>
+			<td>{{ calc.namirnica.masti/100*calc.kolicina | number:2 }}</td>
+			<td>{{ calc.namirnica.proteini/100*calc.kolicina | number:2 }}</td>
+			<td>{{ calc.namirnica.secer/100*calc.kolicina | number:2 }}</td>
+			<td>{{ calc.kolicina | number:2 }}</td>
+			<td>
+				<button class="btn btn-danger btn-sm" ng-show="obrisicalc" ng-click="sigurnicalc=true;obrisicalc=false">Obriši</button>
+				<div ng-show="sigurnicalc"> Da li ste sigurni?
+					<button class="btn btn-danger btn-sm" ng-click="removeCalc(calc.idcalc); sigurnicalc=false;obrisicalc=true;">Da</button>
+					<button class="btn btn-warning btn-sm" ng-click="sigurnicalc=false;obrisicalc=true;">Ne</button>
+				</div>
+				<a class="btn btn-warning btn-sm" href="/#/calc/edit/{{ calc.idcalc }}">Izmeni</a>
+			</td>
+		</tr>
+		<tr>
+			<td><b>Ukupno:</b></td>
+			<!-- <td></td> -->
+			<!-- <td></td> -->
+			<td><b>{{ totalKalorije | number:2 }}</b></td>
+			<td><b>{{ totalUgljeniHidrati | number:2 }}</b></td>
+			<td><b>{{ totalMasti | number:2 }}</b></td>
+			<td><b>{{ totalProteini | number:2 }}</b></td>
+			<td><b>{{ totalSecer | number:2 }}</b></td>
+			<td><b>{{ totalKolicina | number:2 }}</b></td>
+			<td></td>
+		</tr>
+	</tbody>
+</table>
+<!-- <a class="btn btn-info btn-sm" href="/#/calc/add">Dodaj novi unos</a> -->
+<button class="btn btn-danger btn-sm" ng-show="obrisisvecalc" ng-click="sigurnisvecalc=true;obrisisvecalc=false">Obriši sve unose</button>
+<div ng-show="sigurnisvecalc"> Da li ste sigurni?
+	<a class="btn btn-danger btn-sm" href="/#/calc" ng-click="removeAllCalc(); sigurnisvecalc=false;obrisisvecalc=true; pagecalc=0; numbercalc=50; getAllCalc();">Da</a>
+	<button class="btn btn-warning btn-sm" ng-click="sigurnisvecalc=false;obrisisvecalc=true;">Ne</button>
+</div>
+
+
+<div ng-show="showDeleteAlertCalc" class="alert alert-danger alert-dismissible" role="alert">
+	<button type="button" class="close" data-dismiss="alert" aria-label="Zatvori" ng-click="showDeleteAlertCalc=false"><span aria-hidden="true">&times;</span></button>
+	Unos {{calcWarning.namirnica.name}} {{calcWarning.kolicina | number:2}} gr je uspešno obrisan.
+</div>
+
+<div ng-show="showDeleteErrorCalc" class="alert alert-danger alert-dismissible" role="alert">
+	<button type="button" class="close" data-dismiss="alert" aria-label="Zatvori" ng-click="showDeleteErrorCalc=false"><span aria-hidden="true">&times;</span></button>
+	Došlo je do greške prilikom brisanja unosa {{calcWarning.namirnica.name}} {{calcWarning.kolicina | number:2}} gr.
+</div>
+
+<div ng-show="showDeleteAllAlertCalc" class="alert alert-danger alert-dismissible" role="alert">
+	<button type="button" class="close" data-dismiss="alert" aria-label="Zatvori" ng-click="showDeleteAllAlertCalc=false"><span aria-hidden="true">&times;</span></button>
+	Svi unosi su uspešno obrisani.
+</div>
+
+<div ng-show="showDeleteAllErrorCalc" class="alert alert-danger alert-dismissible" role="alert">
+	<button type="button" class="close" data-dismiss="alert" aria-label="Zatvori" ng-click="showDeleteAllErrorCalc=false"><span aria-hidden="true">&times;</span></button>
+	Došlo je do greške prilikom brisanja svih unosa.
+</div>
+
+<div class="row text-center">
+	<span ng-hide="hideSpinnerCalc"
+	class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+	<div ng-show="showErrorCalc" class="alert alert-danger">
+		Ups, nešto je pošlo naopako! :) <a href="#" class="close"
+		data-dismiss="alert" aria-label="Zatvori" ng-click="showErrorCalc=false">&times;</a>
+	</div>
+</div>
+
+<div class="row text-right" ng-hide="hidePaginationCalc">
+	<button class="btn btn-default" ng-click="pagecalc=pagecalc-1; getAllCalc()"
+	ng-disabled="pagecalc == 0">Prethodna</button>
+	<span ng-repeat="pagecalc in totalpagescalc"></span>
+	{{pagecalc +1}} / {{totalpagescalc}}
+	<button class="btn btn-default" ng-click="pagecalc=pagecalc+1; getAllCalc()"
+	ng-disabled="pagecalc == totalpagescalc - 1">Sledeća</button>
+</div>
+
+<br>
+<br>
+<hr>
+<br>
+<br>
+
+<h2>Namirnice<span class="badge">{{ totalnamirnice }}</span></h2>
+<input type="text" ng-model="search" ng-init="addAll()" placeholder="Traži po imenu..." ng-change="getAll()" uib-typeahead="namirnica for namirnica in namirniceTypeahead | filter:$viewValue | limitTo:120"/>
+<button class="btn btn-danger btn-sm" ng-click="search=null; getAll();">Poništi</button>
+<br>
+<select class="btn btn-default btn-sm" ng-model="number" ng-value="20" ng-change="getAll()">
+	<option value = "10">10</option>
+	<option value = "20" selected>20</option>
+	<option value = "50">50</option>
+	<option value = "100">100</option>
+</select>
+Namirnica po stranici
+<table ng-init="page=0; number=20; getAll();" class="table table-bordered table-striped table-hover">
+	<thead>
+		<tr>
+			<th>Namirnica</th>
+			<th>Kalorije<br>(kCal)</th>
+			<th>Ugljeni Hidrati<br>(gr)</th>
+			<th>Masti<br>(gr)</th>
+			<th>Proteini<br>(gr)</th>
+			<th>Šećer<br>(gr)</th>
+			<!-- <th>Id</th>
+			<th>Količina<br>(gr)</th> -->
+			<th>Actions</th>			
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="namirnica in namirnice">
+			<!-- <td>{{ namirnica.id }}</td> -->
+			<td ng-model="namirnica.name"><b>{{ namirnica.name }}</b></td>
+			<td ng-model="namirnica.kalorije">{{ namirnica.kalorije }}</td>
+			<td ng-model="namirnica.ugljeniHidrati">{{ namirnica.ugljeniHidrati }}</td>
+			<td ng-model="namirnica.masti">{{ namirnica.masti }}</td>
+			<td ng-model="namirnica.proteini">{{ namirnica.proteini }}</td>
+			<td ng-model="namirnica.secer">{{ namirnica.secer }}</td>
+<!-- 			<td><input ng-model="namirnica.id" type="number" disabled></td>
+			<td><input ng-model="namirnica.kolicina" type="number"/></td> -->
+			<td><a class="btn btn-info btn-sm" href="/#/calc/add" type="submit" ng-click="getDetail(namirnica)"/>Ubaci u kalkulator</a></td>
+		</tr>
+	</tbody>
+</table>
+
+<!-- <div ng-show="showDeleteAlert" class="alert alert-danger alert-dismissible" role="alert">
+	<button type="button" class="close" data-dismiss="alert" aria-label="Zatvori" ><span aria-hidden="true">&times;</span></button>
+	Namirnica {{namirnicaWarning.id}} sa nazivom {{namirnicaWarning.name}} je uspešno obrisana.
+</div>
+
+<div ng-show="showDeleteError" class="alert alert-danger alert-dismissible" role="alert">
+	<button type="button" class="close" data-dismiss="alert" aria-label="Zatvori"><span aria-hidden="true">&times;</span></button>
+	Došlo je do greške prilikom brisanja namirnice {{namirnicaWarning.id}}, sa nazivom {{namirnicaWarning.id}}.
+</div> -->
+
+<br/>
+
+<div class="row text-center">
+	<span ng-hide="hideSpinner"
+	class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></span>
+	<div ng-show="showError" class="alert alert-danger">
+		Ups, nešto je pošlo naopako! :) <a href="#" class="close"
+		data-dismiss="alert" aria-label="Zatvori" ng-click="showError=false">&times;</a>
+	</div>
+</div>
+
+
+<div class="row text-right" ng-hide="hidePaginationNamirnice">
+	<button class="btn btn-default" ng-click="page=page-1; getAll()"
+	ng-disabled="page == 0">Prethodna</button>
+	<span ng-repeat="page in totalpages"></span>
+	{{page +1}} / {{totalpages}}
+	<button class="btn btn-default" ng-click="page=page+1; getAll()"
+	ng-disabled="page == totalpages - 1">Sledeća</button>
+</div>
